@@ -134,10 +134,9 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
-          title: 'LightCycle Calendar Reminders',
-          text: `Import alarms for the "${activeSchedule.name}" power schedule.`,
         });
         setBackupStatus({ type: 'success', message: 'Calendar shared successfully!' });
+
       } else {
         // Fallback for standard browsers
         const url = URL.createObjectURL(file);
@@ -388,7 +387,8 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
                 <p className="text-[10px] text-slate-400 leading-normal">
                   Generates a 6-month calendar feed containing alarms matching your notification times.
                   <br />
-                  <span className="font-semibold text-slate-700 dark:text-slate-300 block mt-1">iOS Instructions:</span> Tap the button, select <strong className="font-semibold text-slate-800 dark:text-slate-100">"Save to Files"</strong>, then open the file from your iPhone's <strong className="font-semibold text-slate-800 dark:text-slate-100">Files app</strong> to immediately add all alarms to Apple Calendar.
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 block mt-1">iOS Instructions:</span> Tap the button, select <strong className="font-semibold text-slate-800 dark:text-slate-100">"Save to Files"</strong>. Open your iPhone's <strong className="font-semibold text-slate-800 dark:text-slate-100">Files app</strong>. If the file ends in <strong className="font-semibold text-slate-800 dark:text-slate-100">.txt</strong> (e.g. <code>.ics.txt</code> due to iOS PWA limits), rename the file to end strictly in <strong className="font-semibold text-slate-800 dark:text-slate-100">.ics</strong>, then tap it to open and add the alarms directly to Apple Calendar.
+
                 </p>
 
               </div>
