@@ -93,19 +93,32 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
     }
   };
 
-  const handleTestNotification = () => {
+  const handleTestNotification = async () => {
     if (!notificationSupport || notificationPermission !== 'granted') {
       alert('Notification permissions are required to test.');
       return;
     }
     
-    // Fire test notification immediately
-    new Notification('LightCycle Test Notification ⚡', {
+    const title = 'LightCycle Test Notification ⚡';
+    const options = {
       body: 'Notifications are configured correctly on this device!',
       icon: '/pwa-192x192.png',
       badge: '/pwa-192x192.png'
-    });
+    };
+
+    try {
+      if ('serviceWorker' in navigator) {
+        const reg = await navigator.serviceWorker.ready;
+        await reg.showNotification(title, options);
+      } else {
+        new Notification(title, options);
+      }
+    } catch (err) {
+      console.error('Failed to trigger test notification via Service Worker:', err);
+      new Notification(title, options);
+    }
   };
+
 
   const handleExportICS = async () => {
     if (!activeSchedule) return;
@@ -369,9 +382,12 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
                   <Calendar size={13} />
                   Export to iOS/Google Calendar (.ics)
                 </button>
-                <p className="text-[10px] text-slate-400 leading-normal leading-normal">
-                  Generates a 6-month iCalendar feed containing event alarms matching your morning/evening notification times. Tap to import into native device calendars.
+                <p className="text-[10px] text-slate-400 leading-normal">
+                  Generates a 6-month calendar feed containing alarms matching your notification times.
+                  <br />
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 block mt-1">iOS Instructions:</span> Tap the button, select <strong className="font-semibold text-slate-800 dark:text-slate-100">"Save to Files"</strong>, then open the file from your iPhone's <strong className="font-semibold text-slate-800 dark:text-slate-100">Files app</strong> to immediately add all alarms to Apple Calendar.
                 </p>
+
               </div>
             </div>
           )}
