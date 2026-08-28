@@ -125,7 +125,8 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
     try {
       const icsData = generateICS(activeSchedule, 180);
       const fileName = `${activeSchedule.name.replace(/\s+/g, '_')}_Schedule.ics`;
-      const file = new File([icsData], fileName, { type: 'text/calendar;charset=utf-8' });
+      const file = new File([icsData], fileName, { type: 'text/calendar' });
+
 
       // Check if Web Share API is supported for files (ideal for iOS Safari/PWA standalone)
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
