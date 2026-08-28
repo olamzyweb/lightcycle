@@ -343,6 +343,22 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
                   Test Notif
                 </button>
               </div>
+
+              {/* iCalendar Reminders Integration */}
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
+                <span className="text-[11px] font-semibold text-slate-750 dark:text-slate-350 block">Offline Calendar Alarms</span>
+                <button
+                  type="button"
+                  onClick={handleExportICS}
+                  className="w-full py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 dark:bg-slate-850 dark:hover:bg-slate-800 dark:border-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Calendar size={13} />
+                  Export to iOS/Google Calendar (.ics)
+                </button>
+                <p className="text-[10px] text-slate-400 leading-normal leading-normal">
+                  Generates a 6-month iCalendar feed containing event alarms matching your morning/evening notification times. Tap to import into native device calendars.
+                </p>
+              </div>
             </div>
           )}
         </div>
@@ -409,24 +425,6 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
             </div>
           </div>
         )}
-
-          {/* iCalendar Reminders Integration */}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
-            <span className="text-[11px] font-semibold text-slate-750 dark:text-slate-350 block">Offline Calendar Alarms</span>
-            <button
-              type="button"
-              onClick={handleExportICS}
-              className="w-full py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 dark:bg-slate-850 dark:hover:bg-slate-800 dark:border-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <Calendar size={13} />
-              Export to iOS/Google Calendar (.ics)
-            </button>
-            <p className="text-[10px] text-slate-400 leading-normal leading-normal">
-              Generates a 6-month iCalendar feed containing event alarms matching your morning/evening notification times. Tap to import into native device calendars.
-            </p>
-          </div>
-        </div>
-      )}
       </div>
 
       {/* PWA Installation Section */}
