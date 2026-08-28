@@ -46,7 +46,7 @@ export function generateICS(schedule: PowerSchedule, daysCount = 180): string {
       const dtEnd = formatICSDate(currentDateStr, morningHour + 1, morningMin);
 
       lines.push('BEGIN:VEVENT');
-      lines.push(`UID:morning_${schedule.id}_${currentDateStr}`);
+      lines.push(`UID:morning_${schedule.id}_${currentDateStr}@lightcycle.app`);
       lines.push(`DTSTAMP:${nowStamp}`);
       lines.push(`DTSTART:${dtStart}`);
       lines.push(`DTEND:${dtEnd}`);
@@ -55,7 +55,7 @@ export function generateICS(schedule: PowerSchedule, daysCount = 180): string {
       lines.push('BEGIN:VALARM');
       lines.push('ACTION:DISPLAY');
       lines.push('DESCRIPTION:Reminder');
-      lines.push('TRIGGER:-PT0M');
+      lines.push('TRIGGER:-PT0S');
       lines.push('END:VALARM');
       lines.push('END:VEVENT');
     }
@@ -68,7 +68,7 @@ export function generateICS(schedule: PowerSchedule, daysCount = 180): string {
       const dtEnd = formatICSDate(currentDateStr, eveningHour + 1, eveningMin);
 
       lines.push('BEGIN:VEVENT');
-      lines.push(`UID:evening_${schedule.id}_${currentDateStr}`);
+      lines.push(`UID:evening_${schedule.id}_${currentDateStr}@lightcycle.app`);
       lines.push(`DTSTAMP:${nowStamp}`);
       lines.push(`DTSTART:${dtStart}`);
       lines.push(`DTEND:${dtEnd}`);
@@ -77,10 +77,11 @@ export function generateICS(schedule: PowerSchedule, daysCount = 180): string {
       lines.push('BEGIN:VALARM');
       lines.push('ACTION:DISPLAY');
       lines.push('DESCRIPTION:Reminder');
-      lines.push('TRIGGER:-PT0M');
+      lines.push('TRIGGER:-PT0S');
       lines.push('END:VALARM');
       lines.push('END:VEVENT');
     }
+
   }
 
   lines.push('END:VCALENDAR');
