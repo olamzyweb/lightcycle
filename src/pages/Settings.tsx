@@ -3,8 +3,9 @@ import { useTheme } from '../context/ThemeContext';
 import { useSchedules } from '../context/ScheduleContext';
 import { scheduleRepository, actualStatusRepository } from '../services/db';
 import { exportDatabase, importDatabase } from '../services/exportImport';
-import { Moon, Sun, Monitor, Download, Upload, Trash2, AlertCircle, Info } from 'lucide-react';
+import { Moon, Sun, Monitor, Download, Upload, Trash2, AlertCircle, Info, Calendar } from 'lucide-react';
 import { notificationScheduler } from '../services/notificationScheduler';
+import { generateICS } from '../lib/icsGenerator';
 
 interface SettingsProps {
   installPrompt?: any;
@@ -104,6 +105,26 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
       icon: '/pwa-192x192.png',
       badge: '/pwa-192x192.png'
     });
+  };
+
+  const handleExportICS = () => {
+    if (!activeSchedule) return;
+    try {
+      const icsData = generateICS(activeSchedule, 180);
+      const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${activeSchedule.name.replace(/\s+/g, '_')}_Schedule.ics`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      setBackupStatus({ type: 'success', message: 'Calendar reminders exported (.ics)!' });
+      setTimeout(() => setBackupStatus(null), 3000);
+    } catch (err: any) {
+      setBackupStatus({ type: 'error', message: err.message || 'Failed to export calendar.' });
+    }
   };
 
   const handleExport = async () => {
@@ -388,6 +409,24 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
             </div>
           </div>
         )}
+
+          {/* iCalendar Reminders Integration */}
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
+            <span className="text-[11px] font-semibold text-slate-750 dark:text-slate-350 block">Offline Calendar Alarms</span>
+            <button
+              type="button"
+              onClick={handleExportICS}
+              className="w-full py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 dark:bg-slate-850 dark:hover:bg-slate-800 dark:border-slate-800 dark:text-slate-200 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <Calendar size={13} />
+              Export to iOS/Google Calendar (.ics)
+            </button>
+            <p className="text-[10px] text-slate-400 leading-normal leading-normal">
+              Generates a 6-month iCalendar feed containing event alarms matching your morning/evening notification times. Tap to import into native device calendars.
+            </p>
+          </div>
+        </div>
+      )}
       </div>
 
       {/* PWA Installation Section */}
