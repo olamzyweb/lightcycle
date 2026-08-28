@@ -120,9 +120,9 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col md:py-8 md:px-4">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-955 flex flex-col md:py-8 md:px-4">
       {/* Desktop/Tablet centered container wrapper */}
-      <div className="w-full max-w-md mx-auto flex bg-white dark:bg-slate-900 border-0 md:border border-slate-200 dark:border-slate-800 md:rounded-2xl flex-col relative shadow-sm overflow-hidden h-[100dvh] md:h-[85vh] md:max-h-[850px] lg:max-w-lg">
+      <div className="fixed inset-0 md:relative md:inset-auto w-full max-w-md mx-auto flex bg-white dark:bg-slate-900 border-0 md:border border-slate-200 dark:border-slate-800 md:rounded-2xl flex-col shadow-sm overflow-hidden h-[100dvh] md:h-[85vh] md:max-h-[850px] lg:max-w-lg">
         
         {/* Offline Banner */}
         <div className="w-full bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/80 py-2 px-5 flex justify-between items-center text-xs font-medium text-slate-550 dark:text-slate-400">
