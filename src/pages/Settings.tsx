@@ -107,22 +107,36 @@ export const Settings: React.FC<SettingsProps> = ({ installPrompt, isInstalled, 
     });
   };
 
-  const handleExportICS = () => {
+  const handleExportICS = async () => {
     if (!activeSchedule) return;
     try {
       const icsData = generateICS(activeSchedule, 180);
-      const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${activeSchedule.name.replace(/\s+/g, '_')}_Schedule.ics`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      setBackupStatus({ type: 'success', message: 'Calendar reminders exported (.ics)!' });
+      const fileName = `${activeSchedule.name.replace(/\s+/g, '_')}_Schedule.ics`;
+      const file = new File([icsData], fileName, { type: 'text/calendar;charset=utf-8' });
+
+      // Check if Web Share API is supported for files (ideal for iOS Safari/PWA standalone)
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'LightCycle Calendar Reminders',
+          text: `Import alarms for the "${activeSchedule.name}" power schedule.`,
+        });
+        setBackupStatus({ type: 'success', message: 'Calendar shared successfully!' });
+      } else {
+        // Fallback for standard browsers
+        const url = URL.createObjectURL(file);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        setBackupStatus({ type: 'success', message: 'Calendar reminders exported (.ics)!' });
+      }
       setTimeout(() => setBackupStatus(null), 3000);
     } catch (err: any) {
+      if (err.name === 'AbortError') return;
       setBackupStatus({ type: 'error', message: err.message || 'Failed to export calendar.' });
     }
   };
